@@ -8,6 +8,7 @@ package lab.pkg8_ricardogonzalez_11651018;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -31,6 +32,8 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTree1 = new javax.swing.JTree();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         add_proyecto = new javax.swing.JComboBox<>();
@@ -56,6 +59,11 @@ public class Main extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         cb_option = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        arbol = new javax.swing.JTree();
+        cb_arbol = new javax.swing.JComboBox<>();
+
+        jScrollPane1.setViewportView(jTree1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -145,6 +153,21 @@ public class Main extends javax.swing.JFrame {
         jTabbedPane1.addTab("Adicion", jPanel1);
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Proyecto");
+        arbol.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane2.setViewportView(arbol);
+
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 62, 250, 410));
+
+        cb_arbol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-" }));
+        cb_arbol.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_arbolItemStateChanged(evt);
+            }
+        });
+        jPanel2.add(cb_arbol, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 250, -1));
+
         jTabbedPane1.addTab("Proyectos", jPanel2);
 
         getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 520));
@@ -169,6 +192,7 @@ public class Main extends javax.swing.JFrame {
             lista_proyectos.add(p);
             add_proyecto.addItem(add_pro.getText());
             cb_pros.addItem(add_pro.getText());
+            cb_arbol.addItem(add_pro.getText());
             add_pro.setText("");
         }
     }//GEN-LAST:event_jButton1MouseClicked
@@ -299,6 +323,38 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3MouseClicked
 
+    private void cb_arbolItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_arbolItemStateChanged
+        arbol.removeAll();
+        DefaultTreeModel tree = (DefaultTreeModel) arbol.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) tree.getRoot();
+        
+         DefaultMutableTreeNode nodoact;
+         DefaultMutableTreeNode nodopre = new DefaultMutableTreeNode("Predecesores");
+         DefaultMutableTreeNode nodosuc = new DefaultMutableTreeNode("Sucesores");
+         DefaultMutableTreeNode nodonew;
+        
+        for (int i = 0; i < lista_proyectos.size(); i++) {
+            if (lista_proyectos.get(i).getNombre().equals((String) cb_arbol.getSelectedItem())) {
+                for (int j = 0; j < lista_proyectos.get(i).getActividades().size(); j++) {
+                    nodoact = new DefaultMutableTreeNode(lista_proyectos.get(i).getActividades().get(j).getNombre());
+                    
+                    raiz.add(nodoact);
+                    nodoact.add(nodopre);
+                    for (int k = 0; k < lista_proyectos.get(i).getActividades().get(j).getPredecesoras().size(); k++) {
+                        nodonew = new DefaultMutableTreeNode(lista_proyectos.get(i).getActividades().get(j).getPredecesoras().get(k));
+                        nodopre.add(nodonew);
+                    }
+                    nodoact.add(nodosuc);
+                    for (int k = 0; k < lista_proyectos.get(i).getActividades().get(j).getSucesoras().size(); k++) {
+                        nodonew = new DefaultMutableTreeNode(lista_proyectos.get(i).getActividades().get(j).getSucesoras().get(k));
+                        nodosuc.add(nodonew);
+                    }
+                }
+            }
+        }
+        tree.reload();
+    }//GEN-LAST:event_cb_arbolItemStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -340,7 +396,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField add_pro;
     private javax.swing.JComboBox<String> add_proyecto;
     private javax.swing.JTextField add_retraso;
+    private javax.swing.JTree arbol;
     private javax.swing.JComboBox<String> cb_acts;
+    private javax.swing.JComboBox<String> cb_arbol;
     private javax.swing.JComboBox<String> cb_asig;
     private javax.swing.JComboBox<String> cb_option;
     private javax.swing.JComboBox<String> cb_pros;
@@ -359,7 +417,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 
     ArrayList<Proyecto> lista_proyectos = new ArrayList();
